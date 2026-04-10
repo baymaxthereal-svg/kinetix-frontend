@@ -1,21 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Web site created using create-react-app" />
+  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+  <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <!--s
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
       Only files inside the `public` folder can be referenced from the HTML.
@@ -24,12 +22,105 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "background": "#f8f9fa",
+            "on-secondary": "#ffffff",
+            "primary": "#00638a",
+            "surface-variant": "#e1e3e4",
+            "tertiary-fixed-dim": "#ffb77d",
+            "outline": "#717786",
+            "error-container": "#ffdad6",
+            "on-tertiary": "#ffffff",
+            "surface": "#f8f9fa",
+            "on-error-container": "#93000a",
+            "on-tertiary-fixed-variant": "#6e3900",
+            "outline-variant": "#c1c6d7",
+            "inverse-surface": "#2e3132",
+            "on-secondary-fixed-variant": "#0e5138",
+            "tertiary-fixed": "#ffdcc3",
+            "on-error": "#ffffff",
+            "on-tertiary-container": "#fffbff",
+            "surface-dim": "#d9dadb",
+            "on-secondary-container": "#316e52",
+            "inverse-on-surface": "#f0f1f2",
+            "primary-container": "#267ca7",
+            "surface-container-highest": "#e1e3e4",
+            "secondary": "#2c694e",
+            "on-background": "#191c1d",
+            "surface-container-low": "#f3f4f5",
+            "secondary-container": "#aeeecb",
+            "surface-bright": "#f8f9fa",
+            "tertiary-container": "#b15f00",
+            "inverse-primary": "#84cffe",
+            "tertiary": "#8d4b00",
+            "primary-fixed": "#c6e7ff",
+            "on-primary-fixed": "#001e2d",
+            "on-surface": "#191c1d",
+            "surface-tint": "#00658d",
+            "on-primary": "#ffffff",
+            "error": "#ba1a1a",
+            "secondary-fixed-dim": "#95d4b3",
+            "on-surface-variant": "#414754",
+            "surface-container-high": "#e7e8e9",
+            "primary-fixed-dim": "#84cffe",
+            "surface-container": "#edeeef",
+            "on-tertiary-fixed": "#2f1500",
+            "on-primary-container": "#fcfcff",
+            "secondary-fixed": "#b1f0ce",
+            "on-primary-fixed-variant": "#004c6b",
+            "surface-container-lowest": "#ffffff",
+            "on-secondary-fixed": "#002114"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "fontFamily": {
+            "headline": ["Manrope"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          }
+        },
+      },
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    .font-headline {
+      font-family: 'Manrope', sans-serif;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+  <title>Kinetix</title>
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+  <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
 
@@ -39,5 +130,6 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-  </body>
+</body>
+
 </html>

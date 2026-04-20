@@ -10,8 +10,19 @@ import ProductList from './components/productList';
 import Cart from './components/cart';
 import About from './components/about';
 import DashboardLogin from './dashboard/login';
+import DashboardLayout from './dashboard/layout';
+import DashboardHome from './dashboard/home';
+import Addproduct from './dashboard/product';
+import InventoryCategory from './dashboard/inventoryCategoery';
+import AddCategory from './dashboard/category';
+import InventoryProduct from './dashboard/inventoryProduct';
+import CheckOut from './components/checkout';
+import Queries from './dashboard/queries';
+import Orders from './dashboard/orders';
+import OrderDetails from './dashboard/ordersDetails';
 
-// Layout for public pages (with Navbar + Footer)
+
+// Layout for public pages
 function PublicLayout({ children }) {
   return (
     <>
@@ -22,8 +33,8 @@ function PublicLayout({ children }) {
   );
 }
 
-// Layout for separate pages (without Navbar/Footer)
-function SeparateLayout({ children }) {
+// Layout for admin login
+function AdminLogin({ children }) {
   return <>{children}</>;
 }
 
@@ -40,9 +51,18 @@ function App() {
           <Route path="/ProductList" element={<PublicLayout><ProductList /></PublicLayout>} />
           <Route path="/about" element={<PublicLayout><About /></PublicLayout>} />
           <Route path="/Cart" element={<PublicLayout><Cart /></PublicLayout>} />
-
-          {/* Separate routes - no navbar/footer */}
-          <Route path="/dashboard" element={<SeparateLayout><DashboardLogin /></SeparateLayout>} />
+          <Route path='/checkout' element={<PublicLayout><CheckOut /></PublicLayout>} />
+          {/* admin login - no navbar/footer */}
+          <Route path="/dashboard" element={<AdminLogin><DashboardLogin /></AdminLogin>} />
+          {/* admin login - no navbar/footer */}
+          <Route path="/dashboard/home" element={<DashboardLayout><DashboardHome /></DashboardLayout>} />
+          <Route path="/dashboard/add-product" element={<DashboardLayout><Addproduct /></DashboardLayout>} />
+          <Route path="/dashboard/product" element={<DashboardLayout><InventoryProduct /></DashboardLayout>} />
+          <Route path="/dashboard/category" element={<DashboardLayout><InventoryCategory /></DashboardLayout>} />
+          <Route path="/dashboard/add-category" element={<DashboardLayout><AddCategory /></DashboardLayout>} />
+          <Route path='/dashboard/Queries' element={<DashboardLayout><Queries /></DashboardLayout>} />
+          <Route path='/dashboard/Orders' element={<DashboardLayout><Orders /></DashboardLayout>} />
+          <Route path='/dashboard/OrdersDetails' element={<DashboardLayout><OrderDetails /></DashboardLayout>} />
         </Routes>
       </div>
     </BrowserRouter>

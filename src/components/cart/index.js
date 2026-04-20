@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Cart() {
     return (
         <main class="pt-32 pb-24 max-w-7xl mx-auto px-6">
@@ -177,11 +179,12 @@ export default function Cart() {
                                 </div>
                             </div>
                         </div>
-                        <button
+                        <Link
+                            to='/checkout'
                             class="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary font-headline font-bold py-4 rounded-xl text-lg flex items-center justify-center gap-2 hover:opacity-90 active:scale-95 transition-all shadow-lg shadow-primary/20">
                             Proceed to Checkout
                             <span class="material-symbols-outlined" data-icon="lock">lock</span>
-                        </button>
+                        </Link>
                         <div class="mt-8 space-y-4">
                             <p class="text-xs text-on-surface-variant text-center leading-relaxed">
                                 Complimentary shipping on orders over $300. <br />

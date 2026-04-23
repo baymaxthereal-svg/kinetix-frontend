@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from 'react-router-dom';
-
+import { ToastContainer } from 'react-toastify';
 export default function DashboardLayout({ children, pageTitle = "Dashboard" }) {
     const navigate = useNavigate();
 
@@ -9,7 +9,9 @@ export default function DashboardLayout({ children, pageTitle = "Dashboard" }) {
     };
 
     return (
+
         <div className="bg-surface text-on-surface min-h-screen flex">
+            <ToastContainer />
             {/* Fixed Sidebar - always visible */}
             <aside className="fixed top-0 left-0 h-full w-64 bg-slate-50 dark:bg-slate-950 flex flex-col py-6 px-4 z-50 shadow-lg">
                 <div className="mb-10 px-2">

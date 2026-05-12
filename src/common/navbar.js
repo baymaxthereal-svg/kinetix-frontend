@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-
+import { useGetCategories } from '../backend/hooks';
 export default function Navbar() {
     const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
+    const { data, loading, error } = useGetCategories();
 
     return (
         <nav className="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm dark:shadow-none">
@@ -45,23 +46,21 @@ export default function Navbar() {
                                 onMouseLeave={() => setIsCategoriesOpen(false)}
                                 className="absolute left-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-lg shadow-lg py-2 z-50 animate-fadeIn"
                             >
-                                <Link
-                                    to="/Categories"
-                                    className="block px-4 py-2 text-slate-700 dark:text-slate-300 hover:bg-sky-50 dark:hover:bg-slate-700 font-['Manrope'] transition-colors duration-200"
-                                >
-                                    Sensory Room
-                                </Link>
-                                <Link
-                                    to="/Categories"
-                                    className="block px-4 py-2 text-slate-700 dark:text-slate-300 hover:bg-sky-50 dark:hover:bg-slate-700 font-['Manrope'] transition-colors duration-200"
-                                >
-                                    Rehab
-                                </Link>
-
+                                {
+                                    data.data.map(cat => (
+                                        <Link
+                                            to={`/ProductList/${cat.id}`}   // ← backticks, not single quotes
+                                            key={cat.id}                    // ← add a key for React lists
+                                            className="block px-4 py-2 text-slate-700 dark:text-slate-300 hover:bg-sky-50 dark:hover:bg-slate-700 font-['Manrope'] transition-colors duration-200"
+                                        >
+                                            {cat?.name}
+                                        </Link>
+                                    ))
+                                }
                                 {/* See All Categories - Bottom option with top border */}
                                 <div className="border-t border-slate-200 dark:border-slate-700 mt-1 pt-1">
                                     <Link
-                                        href="/categories"
+                                        to="/Categories"
                                         className="block px-4 py-2 text-sky-700 dark:text-sky-400 hover:bg-sky-50 dark:hover:bg-slate-700 font-['Manrope'] font-semibold transition-colors duration-200"
                                     >
                                         See all categories →
@@ -79,12 +78,12 @@ export default function Navbar() {
                             Bulk Order
                         </Link>
                     </a>
-                     <a
+                    <a
                         className="text-slate-600 dark:text-slate-400 hover:text-sky-700 dark:hover:text-sky-200 font-['Manrope'] font-bold tracking-tight transition-colors duration-300"
                         href="/bulk-order"
                     >
                         <Link to="/about">
-                            About Us
+                            Contact Us
                         </Link>
                     </a>
                 </div>

@@ -47,3 +47,71 @@ export const deleteCategory = async (id) => {
     const response = await apiClient.delete(`/api/categories/${id}`);
     return response.data;
 };
+export const createProduct = async (formData) => {
+    try {
+        const response = await apiClient.post('/api/products', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        const message = error.response?.data?.message || 'Failed to add product';
+        throw new Error(message);
+    }
+};
+export const getProducts = async () => {
+    try {
+        const response = await apiClient.get('/api/products');
+        return response.data;
+    } catch (error) {
+        const message = error.response?.data?.message || 'Failed to get products';
+        throw new Error(message);
+    }
+};
+export const updateProduct = async (id, formData) => {
+    const response = await apiClient.put(`/api/products/${id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    });
+    return response.data;
+};
+export const deleteProduct = async (id) => {
+    const response = await apiClient.delete(`/api/products/${id}`);
+    return response.data;
+};
+export const CreateQuery = async (formData) => {
+    try {
+        const response = await apiClient.post('/api/contacts', formData);
+        return response.data;
+    } catch (error) {
+        const message = error.response?.data?.message || 'Unable to send query.';
+        throw new Error(message);
+    }
+};
+export const CreateBulkOrder = async (formData) => {
+    try {
+        const response = await apiClient.post('/api/bulk-orders', formData);
+        return response.data;
+    } catch (error) {
+        const message = error.response?.data?.message || 'Unable to send query.';
+        throw new Error(message);
+    }
+};
+export const getProductsByCatId = async (id) => {
+    try {
+        const response = await apiClient.get(`/api/products/category/${id}`);
+        return response.data;
+    } catch (error) {
+        const message = error.response?.data?.message || 'Unable to send query.';
+        throw new Error(message);
+    }
+};
+export const getProductsById = async (id) => {
+    try {
+        const response = await apiClient.get(`/api/products/${id}`);
+        return response.data;
+    } catch (error) {
+        const message = error.response?.data?.message || 'Unable to send query.';
+        throw new Error(message);
+    }
+};

@@ -47,8 +47,8 @@ function App() {
           <Route path="/" element={<PublicLayout><HomePage /></PublicLayout>} />
           <Route path="/Categories" element={<PublicLayout><BrowseCetegories /></PublicLayout>} />
           <Route path="/BulkOrder" element={<PublicLayout><BulkOrder /></PublicLayout>} />
-          <Route path="/ProductDetail" element={<PublicLayout><ProductDetail /></PublicLayout>} />
-          <Route path="/ProductList" element={<PublicLayout><ProductList /></PublicLayout>} />
+          <Route path="/ProductDetail/:id" element={<PublicLayout><ProductDetail /></PublicLayout>} />
+          <Route path="/ProductList/:id?" element={<PublicLayout><ProductList /></PublicLayout>} />
           <Route path="/about" element={<PublicLayout><About /></PublicLayout>} />
           <Route path="/Cart" element={<PublicLayout><Cart /></PublicLayout>} />
           <Route path='/checkout' element={<PublicLayout><CheckOut /></PublicLayout>} />

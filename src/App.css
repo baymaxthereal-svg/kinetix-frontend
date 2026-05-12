@@ -13,3 +13,24 @@
 .animate-fadeIn {
   animation: fadeIn 0.2s ease-out;
 }
+
+div:where(.swal2-container) .swal2-input {
+  height: 2.625em;
+  padding: 0 .75em;
+  margin: 10px 10px 10px 5px !important;
+}
+
+div:where(.swal2-container) .swal2-textarea {
+  height: 6.75em;
+  padding: .75em;
+  margin: 10px 10px 10px 5px !important;
+}
+div:where(.swal2-container) .swal2-select {
+    min-width: 50%;
+    max-width: 100%;
+    padding: .375em .625em;
+    background: var(--swal2-input-background);
+    color: inherit;
+    font-size: 1.125em;
+    margin: 10px 10px 10px 5px !important;
+}

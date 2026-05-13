@@ -34,13 +34,13 @@ const cartSlice = createSlice({
             if (existingItem) {
                 existingItem.quantity += quantity;
                 toast.success(`Updated ${product.title} quantity (+${quantity})`, {
-                    position: 'bottom-right',
+                    position: 'top-right',
                     autoClose: 2000,
                 });
             } else {
                 state.items.push({ ...product, quantity });
                 toast.success(`${product.title} added to cart (${quantity} ${quantity > 1 ? 'items' : 'item'})`, {
-                    position: 'bottom-right',
+                    position: 'top-right',
                     autoClose: 2000,
                 });
             }
@@ -53,7 +53,7 @@ const cartSlice = createSlice({
             if (removedItem) {
                 state.items = state.items.filter(item => item.id !== productId);
                 toast.info(`${removedItem.title} removed from cart`, {
-                    position: 'bottom-right',
+                    position: 'top-right',
                     autoClose: 2000,
                 });
                 localStorage.setItem('cart', JSON.stringify(state));
@@ -68,7 +68,7 @@ const cartSlice = createSlice({
                     // Remove item if quantity becomes zero or negative
                     state.items = state.items.filter(item => item.id !== productId);
                     toast.info(`${item.title} removed from cart`, {
-                        position: 'bottom-right',
+                        position: 'top-right',
                         autoClose: 2000,
                     });
                 } else {
@@ -84,7 +84,7 @@ const cartSlice = createSlice({
             state.items = [];
             localStorage.removeItem('cart');
             toast.info('Cart cleared', {
-                position: 'bottom-right',
+                position: 'top-right',
                 autoClose: 2000,
             });
         },
@@ -93,10 +93,8 @@ const cartSlice = createSlice({
 
 // Selectors
 export const selectCartItems = (state) => state.cart.items;
-export const selectCartTotal = (state) =>
-    state.cart.items.reduce((total, item) => total + item.price * item.quantity, 0);
-export const selectCartCount = (state) =>
-    state.cart.items.reduce((count, item) => count + item.quantity, 0);
+export const selectCartTotal = (state) => state.cart.items.reduce((total, item) => total + item.price * item.quantity, 0);
+export const selectCartCount = (state) => state.cart.items.reduce((count, item) => count + item.quantity, 0);
 
 // Actions
 export const { addToCart, removeFromCart, updateQuantity, clearCart } = cartSlice.actions;

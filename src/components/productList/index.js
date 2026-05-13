@@ -228,25 +228,6 @@ export default function ProductList() {
           No products found.
         </div>
       )}
-
-      {/* Pagination UI – placeholder, you can implement later */}
-      <nav className="mt-20 flex justify-center gap-2">
-        <button className="w-12 h-12 flex items-center justify-center rounded-xl bg-surface-container-lowest text-on-surface-variant hover:bg-primary-fixed transition-colors">
-          <span className="material-symbols-outlined">chevron_left</span>
-        </button>
-        <button className="w-12 h-12 flex items-center justify-center rounded-xl bg-primary text-on-primary font-bold">
-          1
-        </button>
-        <button className="w-12 h-12 flex items-center justify-center rounded-xl bg-surface-container-lowest text-on-surface-variant hover:bg-primary-fixed transition-colors">
-          2
-        </button>
-        <button className="w-12 h-12 flex items-center justify-center rounded-xl bg-surface-container-lowest text-on-surface-variant hover:bg-primary-fixed transition-colors">
-          3
-        </button>
-        <button className="w-12 h-12 flex items-center justify-center rounded-xl bg-surface-container-lowest text-on-surface-variant hover:bg-primary-fixed transition-colors">
-          <span className="material-symbols-outlined">chevron_right</span>
-        </button>
-      </nav>
     </main>
   );
 }

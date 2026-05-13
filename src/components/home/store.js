@@ -1,58 +1,91 @@
 export default function Store() {
+    // Category data (you can later replace with API data)
+    const categories = [
+        {
+            id: 1,
+            title: "Creative Stores",
+            description: "Playful learning tools for early development.",
+            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDUQIJp23hXIAv-f0GMIF6T7Gmfi0lvIM9-MngBeJR9j6BRn9urFsNKWLgq4yYoZPxqxZKKvAnW0ycdOoBxf3md2TCiLgqADWCz7gq8o9c5FiQau693RXJm1Hfq63dOw1RY9O9z1IzRvUuDS0luCJExOxQEOpFYLgGEc4J-beaEl6TQ6dq4edldJ77wW6NfNahSMe5GF7Er7SeHObREFnw2QNddW4ttxEvXPFDqnruV_krp6IOqTfY2382693hMIKfd8j2qMEJn_Ng",
+            bgClass: "bg-tertiary-fixed",
+            textClass: "text-on-tertiary-fixed",
+            buttonBgClass: "bg-on-tertiary-fixed text-tertiary-fixed",
+        },
+        {
+            id: 2,
+            title: "Occupational Therapy",
+            description: "Professional grade tools for sensory motor rehabilitation.",
+            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCf12UqBzJKx5_PZXrfgT0YImvcJhkV-PjGhkr6kocInBLsh18WJ7-8j5f04BzO5EGcGJD9Vi_gmHiuaE5dpzHEErNpai7RQUN08j2CLFszMuSbtYMHB0kGUR8OFQWkIk0_0kTwwW7u2AUqmGtedXPB2RuNmhry5SisD49HucRWGwpCgc9XpcYmRGQqBYeew4DZWgpQZtvXmq1kJg2jCHJxCuqGljve3wMt_rqVYGtUCwBQlEB57iXliSLJFOvRURArdyyFCqbvm9E",
+            bgClass: "bg-secondary-fixed",
+            textClass: "text-on-secondary-fixed",
+            buttonBgClass: "bg-on-secondary-fixed text-secondary-fixed",
+        },
+        {
+            id: 3,
+            title: "Sensory Integration",
+            description: "Deep pressure and visual stimulation systems.",
+            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDJM3qeiZjV2klHhNygfkew-v-WTXXf0UpTKieZKsrhTqJDHMKQJSeIjJelHT0cyvVN3uk0Mg6aEQDSOYonzq-8CvEuaR_po_v_goIwoOZ3dZV0w9KSPUyGHKa3pFrIDTwInsMjL9vpUFqa5ACPwvwpOqbuBOqSfxitULjnGvcsM4ETdOMaFruT2yDJmvZLz4mx4BEli7tnMD83Nq5Us9NxuK8a059vDZwwGfp1ur9Ly2BcSxKa1p5laYAihzX4fWnB17dVlk_gUS8",
+            bgClass: "bg-primary-fixed",
+            textClass: "text-on-primary-fixed",
+            buttonBgClass: "bg-on-primary-fixed text-primary-fixed",
+        },
+        {
+            id: 4,
+            title: "Therapeutic Exercise",
+            description: "Rehabilitation equipment for strength and mobility.",
+            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuALx1ZjEYwzSV5PRHL8cr0axa6MjfG8fRi_TsKmOamucBW310Kfspig8QiEMTh5R9L5VAscauWjx8_2at1Xrx5PUxrATCvlzA-ssDTFWntTKFLKKsv6E_LDyW9MJa9IxyNylhGLtybvytMQ4XPPzHlE4Pk3HllF9-D-o2QRPQ_0Aa4CfrtaShR6xzsGDSWDEemlcTbOz3a0wVpN158nIHMx6L6VqUmQaWDpLkWR_ep5SY2q2Jv1v3MadSYgghXCeHAZJ4sKhXbQxbU",
+            bgClass: "bg-tertiary-fixed",
+            textClass: "text-on-tertiary-fixed",
+            buttonBgClass: "bg-on-tertiary-fixed text-tertiary-fixed",
+        },
+    ];
+
     return (
-        <section class="py-24 bg-surface">
-            <div class="max-w-7xl mx-auto px-6">
-                <div class="mb-16">
-                    <h2 class="font-headline text-4xl font-extrabold text-on-surface mb-4">Curated Specialized Care</h2>
-                    <p class="text-on-surface-variant max-w-xl">Tailored equipment selections designed for specific
-                        developmental and rehabilitative outcomes.</p>
+        <section className="py-24 bg-surface">
+            <div className="max-w-7xl mx-auto px-6">
+                <div className="mb-16 text-center md:text-left">
+                    <h2 className="font-headline text-4xl font-extrabold text-on-surface mb-4">
+                        Curated Specialized Care
+                    </h2>
+                    <p className="text-on-surface-variant max-w-xl mx-auto md:mx-0">
+                        Tailored equipment selections designed for specific developmental and rehabilitative outcomes.
+                    </p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 h-[600px] md:h-[700px]">
 
-                    <div class="md:col-span-4 bg-tertiary-fixed rounded-3xl overflow-hidden relative group">
-                        <img alt="Creative Stores"
-                            class="w-full h-full object-cover mix-blend-multiply opacity-40 group-hover:scale-105 transition-transform duration-700"
-                            data-alt="close-up of wooden Montessori toys and creative educational tools arranged on a shelf with soft natural lighting"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUQIJp23hXIAv-f0GMIF6T7Gmfi0lvIM9-MngBeJR9j6BRn9urFsNKWLgq4yYoZPxqxZKKvAnW0ycdOoBxf3md2TCiLgqADWCz7gq8o9c5FiQau693RXJm1Hfq63dOw1RY9O9z1IzRvUuDS0luCJExOxQEOpFYLgGEc4J-beaEl6TQ6dq4edldJ77wW6NfNahSMe5GF7Er7SeHObREFnw2QNddW4ttxEvXPFDqnruV_krp6IOqTfY2382693hMIKfd8j2qMEJn_Ng" />
-                        <div class="absolute inset-0 p-8 flex flex-col justify-end">
-                            <h3 class="text-3xl font-headline font-bold text-on-tertiary-fixed mb-2">Creative Stores</h3>
-                            <p class="text-on-tertiary-fixed-variant mb-6">Playful learning tools for early development.</p>
-                            <button
-                                class="w-12 h-12 bg-on-tertiary-fixed text-tertiary-fixed rounded-full flex items-center justify-center">
-                                <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="md:col-span-8 grid grid-rows-2 gap-6">
-
-                        <div class="bg-secondary-fixed rounded-3xl overflow-hidden relative group">
-                            <img alt="Occupational Therapy"
-                                class="w-full h-full object-cover mix-blend-multiply opacity-30 group-hover:scale-105 transition-transform duration-700"
-                                data-alt="modern clinical therapy room with tactile wall panels and physical therapy equipment in soft greens and whites"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCf12UqBzJKx5_PZXrfgT0YImvcJhkV-PjGhkr6kocInBLsh18WJ7-8j5f04BzO5EGcGJD9Vi_gmHiuaE5dpzHEErNpai7RQUN08j2CLFszMuSbtYMHB0kGUR8OFQWkIk0_0kTwwW7u2AUqmGtedXPB2RuNmhry5SisD49HucRWGwpCgc9XpcYmRGQqBYeew4DZWgpQZtvXmq1kJg2jCHJxCuqGljve3wMt_rqVYGtUCwBQlEB57iXliSLJFOvRURArdyyFCqbvm9E" />
-                            <div class="absolute inset-0 p-8 flex flex-col justify-end">
-                                <h3 class="text-3xl font-headline font-bold text-on-secondary-fixed mb-2">Occupational
-                                    Therapy</h3>
-                                <p class="text-on-secondary-fixed-variant max-w-md">Professional grade tools for sensory
-                                    motor rehabilitation.</p>
+                {/* 4‑card grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {categories.map((category) => (
+                        <div
+                            key={category.id}
+                            className={`${category.bgClass} rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col h-full`}
+                        >
+                            {/* Image */}
+                            <div className="relative h-48 overflow-hidden">
+                                <img
+                                    src={category.image}
+                                    alt={category.title}
+                                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                                />
                             </div>
-                        </div>
 
-                        <div class="bg-primary-fixed rounded-3xl overflow-hidden relative group">
-                            <img alt="Sensory Integration"
-                                class="w-full h-full object-cover mix-blend-multiply opacity-30 group-hover:scale-105 transition-transform duration-700"
-                                data-alt="abstract view of vibrant sensory liquid tiles and fiber optic light strands in a dark room setting"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJM3qeiZjV2klHhNygfkew-v-WTXXf0UpTKieZKsrhTqJDHMKQJSeIjJelHT0cyvVN3uk0Mg6aEQDSOYonzq-8CvEuaR_po_v_goIwoOZ3dZV0w9KSPUyGHKa3pFrIDTwInsMjL9vpUFqa5ACPwvwpOqbuBOqSfxitULjnGvcsM4ETdOMaFruT2yDJmvZLz4mx4BEli7tnMD83Nq5Us9NxuK8a059vDZwwGfp1ur9Ly2BcSxKa1p5laYAihzX4fWnB17dVlk_gUS8" />
-                            <div class="absolute inset-0 p-8 flex flex-col justify-end">
-                                <h3 class="text-3xl font-headline font-bold text-on-primary-fixed mb-2">Sensory Integration
+                            {/* Content */}
+                            <div className="p-6 flex flex-col flex-grow">
+                                <h3 className={`text-2xl font-headline font-bold ${category.textClass} mb-2`}>
+                                    {category.title}
                                 </h3>
-                                <p class="text-on-primary-fixed-variant max-w-md">Deep pressure and visual stimulation
-                                    systems.</p>
+                                <p className={`${category.textClass.replace('text-', 'text-')?.replace('on-', 'on-') || 'text-on-surface-variant'} opacity-90 mb-6 flex-grow`}>
+                                    {category.description}
+                                </p>
+                                <button
+                                    className={`w-12 h-12 ${category.buttonBgClass} rounded-full flex items-center justify-center hover:scale-110 transition-transform self-end`}
+                                    aria-label={`Explore ${category.title}`}
+                                >
+                                    <span className="material-symbols-outlined">arrow_forward</span>
+                                </button>
                             </div>
                         </div>
-                    </div>
+                    ))}
                 </div>
             </div>
         </section>
-    )
+    );
 }

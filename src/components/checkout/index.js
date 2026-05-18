@@ -1,32 +1,29 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import Swal from "sweetalert2";
+import { useCreateOrder } from "../../backend/hooks";
+import { clearCart } from "../../redux/cartSlice";
 
 export default function CheckOut() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
-  
-  // Form state
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    facilityName: "",
-    address: "",
-    city: "",
-    postalCode: "",
-  });
-  
+  const { mutate: createOrder, isLoading: isOrderLoading } = useCreateOrder();
+
+  // File upload state
   const [uploadedFile, setUploadedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [uploadError, setUploadError] = useState("");
-  
+
   // Step completion states
   const [shippingCompleted, setShippingCompleted] = useState(false);
   const [paymentCompleted, setPaymentCompleted] = useState(false);
   const [reviewCompleted, setReviewCompleted] = useState(false);
-  
-  // Calculate cart totals
+
+  // Cart totals
   const subtotal = cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
     0
@@ -35,23 +32,59 @@ export default function CheckOut() {
   const total = subtotal + shipping;
   const advancePayment = total * 0.5;
   const remainingPayment = total * 0.5;
-  
-  // Check shipping details completion
+
+  // Formik validation schema
+  const validationSchema = Yup.object({
+    firstName: Yup.string().required("First name is required"),
+    lastName: Yup.string().required("Last name is required"),
+    phone: Yup.string()
+      .required("Phone number is required")
+      .matches(/^[0-9+\-\s()]+$/, "Invalid phone number"),
+    address: Yup.string().required("Address is required"),
+    city: Yup.string().required("City is required"),
+    postalCode: Yup.string().optional(),
+  });
+
+  // Formik form handling
+  const formik = useFormik({
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      phone: "",
+      address: "",
+      city: "",
+      postalCode: "",
+    },
+    validationSchema,
+    validateOnChange: true,
+    validateOnBlur: true,
+    onSubmit: () => {
+      // Trigger review modal (since we already collect all data)
+      handleReviewOrder();
+    },
+  });
+
+  // Update shipping step completion based on formik values and validation
   useEffect(() => {
-    const isShippingComplete = formData.firstName && formData.lastName && formData.address && formData.city;
+    const isShippingComplete =
+      formik.values.firstName &&
+      formik.values.lastName &&
+      formik.values.phone &&
+      formik.values.address &&
+      formik.values.city &&
+      !formik.errors.firstName &&
+      !formik.errors.lastName &&
+      !formik.errors.phone &&
+      !formik.errors.address &&
+      !formik.errors.city;
     setShippingCompleted(isShippingComplete);
-  }, [formData.firstName, formData.lastName, formData.address, formData.city]);
-  
-  // Check payment completion (file uploaded)
+  }, [formik.values, formik.errors]);
+
+  // Payment step completion
   useEffect(() => {
     setPaymentCompleted(!!uploadedFile);
   }, [uploadedFile]);
-  
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-  
+
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -72,7 +105,7 @@ export default function CheckOut() {
       }
     }
   };
-  
+
   const handleRemoveFile = () => {
     setUploadedFile(null);
     setPreviewUrl(null);
@@ -80,18 +113,65 @@ export default function CheckOut() {
     const fileInput = document.getElementById("payment-upload");
     if (fileInput) fileInput.value = "";
   };
-  
+
+  // Prepare order items for backend (matches order_items table)
+  const prepareOrderItems = () => {
+    return cartItems.map(item => ({
+      product_name: item.title,
+      quantity: item.quantity,
+      unit_price: item.price,
+    }));
+  };
+
+  // Actual order submission after confirmation
+  const submitOrder = async () => {
+    const formDataPayload = new FormData();
+    // Combine first and last name into full name
+    const fullName = `${formik.values.firstName} ${formik.values.lastName}`;
+    formDataPayload.append("name", fullName);
+    formDataPayload.append("address", formik.values.address);
+    formDataPayload.append("phone", formik.values.phone);
+    formDataPayload.append("city", formik.values.city);
+    formDataPayload.append("postal_code", formik.values.postalCode);
+    formDataPayload.append("items", JSON.stringify(prepareOrderItems()));
+    formDataPayload.append("payment_screen_short", uploadedFile);
+
+    createOrder(formDataPayload, {
+      onSuccess: () => {
+        // Clear cart from Redux
+        dispatch(clearCart());
+        Swal.fire({
+          title: "Order Placed!",
+          text: "Your order has been successfully placed. Thank you for shopping with us.",
+          icon: "success",
+          confirmButtonColor: "#0a7e3a",
+        }).then(() => {
+          navigate("/");
+        });
+      },
+      onError: (error) => {
+        Swal.fire({
+          title: "Order Failed",
+          text: error?.response?.data?.error || "Something went wrong. Please try again.",
+          icon: "error",
+          confirmButtonColor: "#d33",
+        });
+      },
+    });
+  };
+
+  // SweetAlert2 review modal
   const handleReviewOrder = async () => {
     if (!shippingCompleted) {
-      Swal.fire("Incomplete Information", "Please fill in all required shipping details (First Name, Last Name, Address, City).", "warning");
+      Swal.fire("Incomplete Information", "Please fill in all required shipping details (First Name, Last Name, Phone, Address, City).", "warning");
       return;
     }
     if (!paymentCompleted) {
       Swal.fire("Payment Confirmation Required", "Please upload your payment confirmation.", "warning");
       return;
     }
-    
-    // Build order items table with defined column widths
+
+    // Build order items table HTML
     const orderItemsRows = cartItems.map(item => `
       <tr style="border-bottom: 1px solid #e5e7eb;">
         <td style="padding: 8px; text-align: left; width: 50%;">${item.title}</td>
@@ -100,8 +180,7 @@ export default function CheckOut() {
         <td style="padding: 8px; text-align: right; width: 20%;">$${(item.price * item.quantity).toFixed(2)}</td>
       </tr>
     `).join("");
-    
-    // Payment confirmation preview
+
     let paymentPreviewHtml = "";
     if (uploadedFile) {
       if (uploadedFile.type.startsWith("image/")) {
@@ -126,16 +205,16 @@ export default function CheckOut() {
         `;
       }
     }
-    
+
     const modalHtml = `
       <div style="text-align: left; max-height: 70vh; overflow-y: auto; padding-right: 10px;">
         <h3 style="margin-bottom: 10px; font-size: 1.25rem; font-weight: bold;">Billing Details</h3>
         <div style="background: #f9fafb; padding: 12px; border-radius: 8px; margin-bottom: 20px;">
-          <p><strong>Name:</strong> ${formData.firstName} ${formData.lastName}</p>
-          <p><strong>Facility:</strong> ${formData.facilityName || "N/A"}</p>
-          <p><strong>Address:</strong> ${formData.address}</p>
-          <p><strong>City:</strong> ${formData.city}</p>
-          <p><strong>Postal Code:</strong> ${formData.postalCode || "N/A"}</p>
+          <p><strong>Name:</strong> ${formik.values.firstName} ${formik.values.lastName}</p>
+          <p><strong>Phone:</strong> ${formik.values.phone}</p>
+          <p><strong>Address:</strong> ${formik.values.address}</p>
+          <p><strong>City:</strong> ${formik.values.city}</p>
+          <p><strong>Postal Code:</strong> ${formik.values.postalCode || "N/A"}</p>
         </div>
         
         <h3 style="margin-bottom: 10px; font-size: 1.25rem; font-weight: bold;">Order Items</h3>
@@ -185,7 +264,7 @@ export default function CheckOut() {
         ${paymentPreviewHtml}
       </div>
     `;
-    
+
     const result = await Swal.fire({
       title: "Review Your Order",
       html: modalHtml,
@@ -202,26 +281,22 @@ export default function CheckOut() {
         cancelButton: "font-bold py-2 px-4"
       }
     });
-    
+
     if (result.isConfirmed) {
       setReviewCompleted(true);
-      await Swal.fire({
-        title: "Order Confirmed!",
-        text: "Your order has been placed successfully. You will receive a confirmation email shortly.",
-        icon: "success",
-        confirmButtonColor: "#0a7e3a"
-      });
-      // navigate("/order-success");
+      // Call the mutation to create order
+      await submitOrder();
     }
   };
-  
+
   // Cleanup preview URL on unmount
   useEffect(() => {
     return () => {
       if (previewUrl) URL.revokeObjectURL(previewUrl);
     };
   }, [previewUrl]);
-  
+
+  // Empty cart check
   if (cartItems.length === 0) {
     return (
       <main className="flex-grow pt-32 pb-20 px-4 md:px-8 max-w-7xl mx-auto w-full text-center">
@@ -238,85 +313,143 @@ export default function CheckOut() {
       </main>
     );
   }
-  
+
   return (
     <main className="flex-grow pt-32 pb-20 px-4 md:px-8 max-w-7xl mx-auto w-full">
       {/* Stepper */}
       <div className="mb-12 max-w-3xl mx-auto">
         <div className="flex items-center justify-between relative">
           <div className="absolute top-1/2 left-0 w-full h-0.5 bg-surface-container-high -z-10 -translate-y-1/2"></div>
-          
+
           {/* Step 1 */}
           <div className="flex flex-col items-center gap-2">
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all ${
-              shippingCompleted ? "bg-secondary text-on-secondary" : "bg-surface-container-highest text-on-surface-variant"
-            }`}>
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all ${shippingCompleted ? "bg-secondary text-on-secondary" : "bg-surface-container-highest text-on-surface-variant"
+              }`}>
               {shippingCompleted ? <span className="material-symbols-outlined text-sm">check</span> : "1"}
             </div>
             <span className={`text-xs font-bold uppercase tracking-widest ${shippingCompleted ? "text-secondary" : "text-on-surface-variant"}`}>Shipping</span>
           </div>
-          
+
           {/* Step 2 */}
           <div className="flex flex-col items-center gap-2">
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all ${
-              paymentCompleted ? "bg-secondary text-on-secondary" : shippingCompleted ? "bg-primary text-on-primary ring-4 ring-primary-fixed" : "bg-surface-container-highest text-on-surface-variant"
-            }`}>
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all ${paymentCompleted ? "bg-secondary text-on-secondary" : shippingCompleted ? "bg-primary text-on-primary ring-4 ring-primary-fixed" : "bg-surface-container-highest text-on-surface-variant"
+              }`}>
               {paymentCompleted ? <span className="material-symbols-outlined text-sm">check</span> : "2"}
             </div>
             <span className={`text-xs font-bold uppercase tracking-widest ${paymentCompleted ? "text-secondary" : shippingCompleted ? "text-primary" : "text-on-surface-variant"}`}>Payment</span>
           </div>
-          
+
           {/* Step 3 */}
           <div className="flex flex-col items-center gap-2">
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all ${
-              reviewCompleted ? "bg-secondary text-on-secondary" : (shippingCompleted && paymentCompleted) ? "bg-primary text-on-primary ring-4 ring-primary-fixed" : "bg-surface-container-highest text-on-surface-variant"
-            }`}>
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all ${reviewCompleted ? "bg-secondary text-on-secondary" : (shippingCompleted && paymentCompleted) ? "bg-primary text-on-primary ring-4 ring-primary-fixed" : "bg-surface-container-highest text-on-surface-variant"
+              }`}>
               {reviewCompleted ? <span className="material-symbols-outlined text-sm">check</span> : "3"}
             </div>
             <span className={`text-xs font-bold uppercase tracking-widest ${reviewCompleted ? "text-secondary" : (shippingCompleted && paymentCompleted) ? "text-primary" : "text-on-surface-variant"}`}>Review</span>
           </div>
         </div>
       </div>
-      
-      <form onSubmit={(e) => e.preventDefault()}>
+
+      <form onSubmit={formik.handleSubmit}>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           <div className="lg:col-span-7 space-y-12">
-            {/* Billing Details Section (unchanged) */}
+            {/* Billing Details Section */}
             <section className="space-y-6">
               <div className="flex items-center gap-4">
                 <span className="text-label-md uppercase tracking-widest text-on-surface-variant text-xs font-bold">Step 02</span>
                 <h2 className="text-3xl font-extrabold tracking-tight text-primary">Billing Details</h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-surface-container-low p-8 rounded-xl">
-                {/* ... same as earlier ... */}
                 <div className="space-y-2">
                   <label className="block text-sm font-semibold text-on-surface-variant">First Name <span className="text-error">*</span></label>
-                  <input type="text" name="firstName" value={formData.firstName} onChange={handleInputChange} className="w-full bg-surface-container-highest border-none rounded-sm px-4 py-3" placeholder="Enter first name" required />
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={formik.values.firstName}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    className={`w-full bg-surface-container-highest border-none rounded-sm px-4 py-3 ${formik.touched.firstName && formik.errors.firstName ? "ring-2 ring-error" : ""}`}
+                    placeholder="Enter first name"
+                  />
+                  {formik.touched.firstName && formik.errors.firstName && (
+                    <p className="text-error text-xs mt-1">{formik.errors.firstName}</p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-semibold text-on-surface-variant">Last Name <span className="text-error">*</span></label>
-                  <input type="text" name="lastName" value={formData.lastName} onChange={handleInputChange} className="w-full bg-surface-container-highest border-none rounded-sm px-4 py-3" placeholder="Enter last name" required />
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={formik.values.lastName}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    className={`w-full bg-surface-container-highest border-none rounded-sm px-4 py-3 ${formik.touched.lastName && formik.errors.lastName ? "ring-2 ring-error" : ""}`}
+                    placeholder="Enter last name"
+                  />
+                  {formik.touched.lastName && formik.errors.lastName && (
+                    <p className="text-error text-xs mt-1">{formik.errors.lastName}</p>
+                  )}
                 </div>
                 <div className="md:col-span-2 space-y-2">
-                  <label className="block text-sm font-semibold text-on-surface-variant">Clinic or Facility Name (Optional)</label>
-                  <input type="text" name="facilityName" value={formData.facilityName} onChange={handleInputChange} className="w-full bg-surface-container-highest border-none rounded-sm px-4 py-3" placeholder="Healthcare center name" />
+                  <label className="block text-sm font-semibold text-on-surface-variant">Phone Number <span className="text-error">*</span></label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formik.values.phone}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    className={`w-full bg-surface-container-highest border-none rounded-sm px-4 py-3 ${formik.touched.phone && formik.errors.phone ? "ring-2 ring-error" : ""}`}
+                    placeholder="Enter phone number"
+                  />
+                  {formik.touched.phone && formik.errors.phone && (
+                    <p className="text-error text-xs mt-1">{formik.errors.phone}</p>
+                  )}
                 </div>
                 <div className="md:col-span-2 space-y-2">
                   <label className="block text-sm font-semibold text-on-surface-variant">Address <span className="text-error">*</span></label>
-                  <input type="text" name="address" value={formData.address} onChange={handleInputChange} className="w-full bg-surface-container-highest border-none rounded-sm px-4 py-3" placeholder="House number and street name" required />
+                  <input
+                    type="text"
+                    name="address"
+                    value={formik.values.address}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    className={`w-full bg-surface-container-highest border-none rounded-sm px-4 py-3 ${formik.touched.address && formik.errors.address ? "ring-2 ring-error" : ""}`}
+                    placeholder="House number and street name"
+                  />
+                  {formik.touched.address && formik.errors.address && (
+                    <p className="text-error text-xs mt-1">{formik.errors.address}</p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-semibold text-on-surface-variant">City <span className="text-error">*</span></label>
-                  <input type="text" name="city" value={formData.city} onChange={handleInputChange} className="w-full bg-surface-container-highest border-none rounded-sm px-4 py-3" placeholder="City" required />
+                  <input
+                    type="text"
+                    name="city"
+                    value={formik.values.city}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    className={`w-full bg-surface-container-highest border-none rounded-sm px-4 py-3 ${formik.touched.city && formik.errors.city ? "ring-2 ring-error" : ""}`}
+                    placeholder="City"
+                  />
+                  {formik.touched.city && formik.errors.city && (
+                    <p className="text-error text-xs mt-1">{formik.errors.city}</p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-semibold text-on-surface-variant">Postal Code (Optional)</label>
-                  <input type="text" name="postalCode" value={formData.postalCode} onChange={handleInputChange} className="w-full bg-surface-container-highest border-none rounded-sm px-4 py-3" placeholder="ZIP / Postal code" />
+                  <input
+                    type="text"
+                    name="postalCode"
+                    value={formik.values.postalCode}
+                    onChange={formik.handleChange}
+                    className="w-full bg-surface-container-highest border-none rounded-sm px-4 py-3"
+                    placeholder="ZIP / Postal code"
+                  />
                 </div>
               </div>
             </section>
-            
-            {/* Advance Payment Section (unchanged) */}
+
+            {/* Advance Payment Section */}
             <section className="space-y-6">
               <div className="flex items-center gap-4">
                 <span className="text-label-md uppercase tracking-widest text-tertiary text-xs font-bold">Mandatory</span>
@@ -370,23 +503,22 @@ export default function CheckOut() {
                 </div>
               </div>
             </section>
-            
+
             <div className="flex justify-between items-center pt-6">
               <Link to="/cart" className="text-primary font-bold flex items-center gap-2 hover:translate-x-[-4px] transition-transform">
                 <span className="material-symbols-outlined">arrow_back</span> Back to Cart
               </Link>
               <button
-                type="button"
-                onClick={handleReviewOrder}
-                disabled={!shippingCompleted || !paymentCompleted}
-                className={`bg-primary text-on-primary px-10 py-4 rounded-xl font-bold shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all ${(!shippingCompleted || !paymentCompleted) ? "opacity-50 cursor-not-allowed" : ""}`}
+                type="submit"
+                disabled={!shippingCompleted || !paymentCompleted || isOrderLoading}
+                className={`bg-primary text-on-primary px-10 py-4 rounded-xl font-bold shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all ${(!shippingCompleted || !paymentCompleted || isOrderLoading) ? "opacity-50 cursor-not-allowed" : ""}`}
               >
-                Review Final Order
+                {isOrderLoading ? "Processing..." : "Review Final Order"}
               </button>
             </div>
           </div>
-          
-          {/* Order Summary Sidebar (unchanged) */}
+
+          {/* Order Summary Sidebar */}
           <aside className="lg:col-span-5">
             <div className="sticky top-32 glass-panel p-8 rounded-xl shadow-xl shadow-slate-900/5 space-y-8 border border-white/50">
               <h3 className="text-2xl font-extrabold tracking-tight text-on-surface">Order Summary</h3>

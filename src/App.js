@@ -20,6 +20,8 @@ import CheckOut from './components/checkout';
 import Queries from './dashboard/queries';
 import Orders from './dashboard/orders';
 import OrderDetails from './dashboard/ordersDetails';
+import BulkOrders from './dashboard/bulkOrder';
+import Settings from './dashboard/setting';
 
 
 // Layout for public pages
@@ -62,7 +64,9 @@ function App() {
           <Route path="/dashboard/add-category" element={<DashboardLayout><AddCategory /></DashboardLayout>} />
           <Route path='/dashboard/Queries' element={<DashboardLayout><Queries /></DashboardLayout>} />
           <Route path='/dashboard/Orders' element={<DashboardLayout><Orders /></DashboardLayout>} />
-          <Route path='/dashboard/OrdersDetails' element={<DashboardLayout><OrderDetails /></DashboardLayout>} />
+          <Route path='/dashboard/OrdersDetails/:id' element={<DashboardLayout><OrderDetails /></DashboardLayout>} />
+          <Route path='/dashboard/bulkOrders' element={<DashboardLayout><BulkOrders /></DashboardLayout>} />
+           <Route path='/dashboard/settings' element={<DashboardLayout><Settings /></DashboardLayout>} />
         </Routes>
       </div>
     </BrowserRouter>

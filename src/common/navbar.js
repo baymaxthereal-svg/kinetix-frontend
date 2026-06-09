@@ -1,20 +1,14 @@
 import { useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectCartCount } from '../redux/cartSlice';
 import { useGetCategories } from '../backend/hooks';
 import logo from '../assets/logo/logo.png';
 
 export default function Navbar() {
-    const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
+    const [isShopDropdownOpen, setIsShopDropdownOpen] = useState(false);
     const { data, loading, error } = useGetCategories();
     const cartCount = useSelector(selectCartCount);
-    const location = useLocation();
-
-    // Determine if any category-related page is active (ProductList or Categories)
-    const isCategoryActive = (pathname) => {
-        return pathname.startsWith('/ProductList/') || pathname === '/Categories';
-    };
 
     return (
         <nav className="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm dark:shadow-none">
@@ -27,9 +21,10 @@ export default function Navbar() {
                 </NavLink>
 
                 <div className="hidden md:flex items-center space-x-8">
-                    {/* Shop Page Link */}
+                    {/* Home - fixed with end prop only */}
                     <NavLink
                         to="/"
+                        end
                         className={({ isActive }) =>
                             `text-sky-800 dark:text-sky-300 font-['Manrope'] font-bold tracking-tight hover:text-sky-600 dark:hover:text-sky-200 transition-colors duration-300 pb-1 ${
                                 isActive
@@ -37,26 +32,25 @@ export default function Navbar() {
                                     : 'border-b-2 border-transparent'
                             }`
                         }
-                        end
                     >
-                        Shop
+                        Home
                     </NavLink>
 
-                    {/* Categories with Dropdown */}
+                    {/* Shop with Categories Dropdown */}
                     <div className="relative">
                         <button
-                            onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
-                            onMouseEnter={() => setIsCategoriesOpen(true)}
-                            onMouseLeave={() => setIsCategoriesOpen(false)}
-                            className={`flex items-center gap-1 font-['Manrope'] font-bold tracking-tight transition-colors duration-300 bg-transparent ${
-                                isCategoryActive(location.pathname)
-                                    ? 'text-sky-700 dark:text-sky-200'
-                                    : 'text-slate-600 dark:text-slate-400 hover:text-sky-700 dark:hover:text-sky-200'
+                            onClick={() => setIsShopDropdownOpen(!isShopDropdownOpen)}
+                            onMouseEnter={() => setIsShopDropdownOpen(true)}
+                            onMouseLeave={() => setIsShopDropdownOpen(false)}
+                            className={`flex items-center gap-1 font-['Manrope'] font-bold tracking-tight transition-colors duration-300 bg-transparent pb-1 ${
+                                isShopDropdownOpen
+                                    ? 'text-sky-700 dark:text-sky-200 border-b-2 border-sky-800 dark:border-sky-300'
+                                    : 'text-slate-600 dark:text-slate-400 hover:text-sky-700 dark:hover:text-sky-200 border-b-2 border-transparent'
                             }`}
                         >
-                            Categories
+                            Shop
                             <svg
-                                className={`w-4 h-4 transition-transform duration-200 ${isCategoriesOpen ? 'rotate-180' : ''}`}
+                                className={`w-4 h-4 transition-transform duration-200 ${isShopDropdownOpen ? 'rotate-180' : ''}`}
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -66,10 +60,10 @@ export default function Navbar() {
                         </button>
 
                         {/* Dropdown Menu */}
-                        {isCategoriesOpen && (
+                        {isShopDropdownOpen && (
                             <div
-                                onMouseEnter={() => setIsCategoriesOpen(true)}
-                                onMouseLeave={() => setIsCategoriesOpen(false)}
+                                onMouseEnter={() => setIsShopDropdownOpen(true)}
+                                onMouseLeave={() => setIsShopDropdownOpen(false)}
                                 className="absolute left-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-lg shadow-lg py-2 z-50 animate-fadeIn"
                             >
                                 {loading && (
@@ -97,7 +91,7 @@ export default function Navbar() {
                                         {cat?.name}
                                     </NavLink>
                                 ))}
-                                {/* See All Categories - Bottom option */}
+                                {/* See All Categories link */}
                                 <div className="border-t border-slate-200 dark:border-slate-700 mt-1 pt-1">
                                     <NavLink
                                         to="/Categories"
@@ -116,6 +110,7 @@ export default function Navbar() {
                         )}
                     </div>
 
+                    {/* Bulk Order */}
                     <NavLink
                         to="/BulkOrder"
                         className={({ isActive }) =>
@@ -129,8 +124,23 @@ export default function Navbar() {
                         Bulk Order
                     </NavLink>
 
+                    {/* About Us */}
                     <NavLink
                         to="/about"
+                        className={({ isActive }) =>
+                            `font-['Manrope'] font-bold tracking-tight transition-colors duration-300 pb-1 ${
+                                isActive
+                                    ? 'border-b-2 border-sky-800 dark:border-sky-300 text-sky-800 dark:text-sky-300'
+                                    : 'border-b-2 border-transparent text-slate-600 dark:text-slate-400 hover:text-sky-700 dark:hover:text-sky-200'
+                            }`
+                        }
+                    >
+                        About Us
+                    </NavLink>
+
+                    {/* Contact Us */}
+                    <NavLink
+                        to="/contactus"
                         className={({ isActive }) =>
                             `font-['Manrope'] font-bold tracking-tight transition-colors duration-300 pb-1 ${
                                 isActive

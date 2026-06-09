@@ -38,8 +38,6 @@ export default function Footer() {
                         <li><a class="text-slate-500 dark:text-slate-400 hover:text-sky-600 dark:hover:text-sky-300 transition-all"
                             href="#">Contact Us</a></li>
                         <li><a class="text-slate-500 dark:text-slate-400 hover:text-sky-600 dark:hover:text-sky-300 transition-all"
-                            href="#">Privacy Policy</a></li>
-                        <li><a class="text-slate-500 dark:text-slate-400 hover:text-sky-600 dark:hover:text-sky-300 transition-all"
                             href="#">Terms of Service</a></li>
                     </ul>
                 </div>

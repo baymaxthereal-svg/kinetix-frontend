@@ -1,91 +1,153 @@
+import { useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { useGetCategories } from '../../backend/hooks';
+
 export default function Store() {
-    // Category data (you can later replace with API data)
-    const categories = [
-        {
-            id: 1,
-            title: "Creative Stores",
-            description: "Playful learning tools for early development.",
-            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDUQIJp23hXIAv-f0GMIF6T7Gmfi0lvIM9-MngBeJR9j6BRn9urFsNKWLgq4yYoZPxqxZKKvAnW0ycdOoBxf3md2TCiLgqADWCz7gq8o9c5FiQau693RXJm1Hfq63dOw1RY9O9z1IzRvUuDS0luCJExOxQEOpFYLgGEc4J-beaEl6TQ6dq4edldJ77wW6NfNahSMe5GF7Er7SeHObREFnw2QNddW4ttxEvXPFDqnruV_krp6IOqTfY2382693hMIKfd8j2qMEJn_Ng",
-            bgClass: "bg-tertiary-fixed",
-            textClass: "text-on-tertiary-fixed",
-            buttonBgClass: "bg-on-tertiary-fixed text-tertiary-fixed",
-        },
-        {
-            id: 2,
-            title: "Occupational Therapy",
-            description: "Professional grade tools for sensory motor rehabilitation.",
-            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCf12UqBzJKx5_PZXrfgT0YImvcJhkV-PjGhkr6kocInBLsh18WJ7-8j5f04BzO5EGcGJD9Vi_gmHiuaE5dpzHEErNpai7RQUN08j2CLFszMuSbtYMHB0kGUR8OFQWkIk0_0kTwwW7u2AUqmGtedXPB2RuNmhry5SisD49HucRWGwpCgc9XpcYmRGQqBYeew4DZWgpQZtvXmq1kJg2jCHJxCuqGljve3wMt_rqVYGtUCwBQlEB57iXliSLJFOvRURArdyyFCqbvm9E",
-            bgClass: "bg-secondary-fixed",
-            textClass: "text-on-secondary-fixed",
-            buttonBgClass: "bg-on-secondary-fixed text-secondary-fixed",
-        },
-        {
-            id: 3,
-            title: "Sensory Integration",
-            description: "Deep pressure and visual stimulation systems.",
-            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDJM3qeiZjV2klHhNygfkew-v-WTXXf0UpTKieZKsrhTqJDHMKQJSeIjJelHT0cyvVN3uk0Mg6aEQDSOYonzq-8CvEuaR_po_v_goIwoOZ3dZV0w9KSPUyGHKa3pFrIDTwInsMjL9vpUFqa5ACPwvwpOqbuBOqSfxitULjnGvcsM4ETdOMaFruT2yDJmvZLz4mx4BEli7tnMD83Nq5Us9NxuK8a059vDZwwGfp1ur9Ly2BcSxKa1p5laYAihzX4fWnB17dVlk_gUS8",
-            bgClass: "bg-primary-fixed",
-            textClass: "text-on-primary-fixed",
-            buttonBgClass: "bg-on-primary-fixed text-primary-fixed",
-        },
-        {
-            id: 4,
-            title: "Therapeutic Exercise",
-            description: "Rehabilitation equipment for strength and mobility.",
-            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuALx1ZjEYwzSV5PRHL8cr0axa6MjfG8fRi_TsKmOamucBW310Kfspig8QiEMTh5R9L5VAscauWjx8_2at1Xrx5PUxrATCvlzA-ssDTFWntTKFLKKsv6E_LDyW9MJa9IxyNylhGLtybvytMQ4XPPzHlE4Pk3HllF9-D-o2QRPQ_0Aa4CfrtaShR6xzsGDSWDEemlcTbOz3a0wVpN158nIHMx6L6VqUmQaWDpLkWR_ep5SY2q2Jv1v3MadSYgghXCeHAZJ4sKhXbQxbU",
-            bgClass: "bg-tertiary-fixed",
-            textClass: "text-on-tertiary-fixed",
-            buttonBgClass: "bg-on-tertiary-fixed text-tertiary-fixed",
-        },
-    ];
+  const { data, isLoading, error } = useGetCategories();
+  const scrollContainerRef = useRef(null);
 
+  const scroll = (direction) => {
+    if (!scrollContainerRef.current) return;
+    const scrollAmount = 320;
+    scrollContainerRef.current.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth',
+    });
+  };
+
+  if (isLoading) {
     return (
-        <section className="py-24 bg-surface">
-            <div className="max-w-7xl mx-auto px-6">
-                <div className="mb-16 text-center md:text-left">
-                    <h2 className="font-headline text-4xl font-extrabold text-on-surface mb-4">
-                        Curated Specialized Care
-                    </h2>
-                    <p className="text-on-surface-variant max-w-xl mx-auto md:mx-0">
-                        Tailored equipment selections designed for specific developmental and rehabilitative outcomes.
-                    </p>
-                </div>
-
-                {/* 4‑card grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {categories.map((category) => (
-                        <div
-                            key={category.id}
-                            className={`${category.bgClass} rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col h-full`}
-                        >
-                            {/* Image */}
-                            <div className="relative h-48 overflow-hidden">
-                                <img
-                                    src={category.image}
-                                    alt={category.title}
-                                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-                                />
-                            </div>
-
-                            {/* Content */}
-                            <div className="p-6 flex flex-col flex-grow">
-                                <h3 className={`text-2xl font-headline font-bold ${category.textClass} mb-2`}>
-                                    {category.title}
-                                </h3>
-                                <p className={`${category.textClass.replace('text-', 'text-')?.replace('on-', 'on-') || 'text-on-surface-variant'} opacity-90 mb-6 flex-grow`}>
-                                    {category.description}
-                                </p>
-                                <button
-                                    className={`w-12 h-12 ${category.buttonBgClass} rounded-full flex items-center justify-center hover:scale-110 transition-transform self-end`}
-                                    aria-label={`Explore ${category.title}`}
-                                >
-                                    <span className="material-symbols-outlined">arrow_forward</span>
-                                </button>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </section>
+      <section className="py-24 bg-surface">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+        </div>
+      </section>
     );
+  }
+
+  if (error) {
+    return (
+      <section className="py-24 bg-surface">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <div className="bg-error/10 text-error p-4 rounded-xl">
+            Failed to load categories. Please try again later.
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  const categories = data?.data || [];
+
+  if (categories.length === 0) {
+    return (
+      <section className="py-24 bg-surface">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <p className="text-on-surface-variant">No categories found.</p>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="py-24 bg-surface">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="mb-16 text-center md:text-left">
+          <h2 className="font-headline text-4xl font-extrabold text-on-surface mb-4">
+            Our Specialized Categories
+          </h2>
+          <p className="text-on-surface-variant max-w-xl mx-auto md:mx-0">
+            Browse a wide range of physiotherapy equipment, occupational therapy products,
+            sensory integration tools, and home healthcare solutions.
+          </p>
+        </div>
+
+        {/* Slider container with navigation */}
+        <div className="relative group">
+          {/* Left arrow */}
+          <button
+            onClick={() => scroll('left')}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 dark:bg-slate-800/90 rounded-full p-2 shadow-lg hover:bg-white dark:hover:bg-slate-700 transition-all -ml-4 opacity-0 group-hover:opacity-100 disabled:opacity-0"
+            aria-label="Previous"
+          >
+            <span className="material-symbols-outlined">chevron_left</span>
+          </button>
+
+          {/* Scrollable container */}
+          <div
+            ref={scrollContainerRef}
+            className="flex overflow-x-auto scroll-smooth snap-x snap-mandatory gap-6 pb-4 hide-scrollbar"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {categories.map((category) => (
+              <div
+                key={category.id}
+                className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] flex-shrink-0 snap-start"
+              >
+                {/* Image */}
+                <div className="relative h-48 overflow-hidden">
+                  <img
+                    src={process.env.REACT_APP_BE_URL + category.image}
+                    alt={category.name}
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                  />
+                </div>
+
+                {/* Content */}
+                <div className="p-6 flex flex-col flex-grow">
+                  <h3 className="text-2xl font-headline font-bold text-gray-900 mb-2 line-clamp-2">
+                    {category.name}
+                  </h3>
+                  <p className="text-gray-600 mb-6 flex-grow line-clamp-3 text-sm">
+                    {category.description}
+                  </p>
+                  <Link
+                    to={`/ProductList/${category.id}`}
+                    className="w-12 h-12 bg-gray-100 text-gray-800 rounded-full flex items-center justify-center hover:bg-gray-200 hover:shadow transition-all self-end"
+                    aria-label={`Explore ${category.name}`}
+                  >
+                    <span className="material-symbols-outlined">arrow_forward</span>
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Right arrow */}
+          <button
+            onClick={() => scroll('right')}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 dark:bg-slate-800/90 rounded-full p-2 shadow-lg hover:bg-white dark:hover:bg-slate-700 transition-all -mr-4 opacity-0 group-hover:opacity-100 disabled:opacity-0"
+            aria-label="Next"
+          >
+            <span className="material-symbols-outlined">chevron_right</span>
+          </button>
+        </div>
+
+        {/* Dot indicators */}
+        <div className="flex justify-center gap-2 mt-8">
+          {categories.map((_, idx) => (
+            <button
+              key={idx}
+              className="w-2 h-2 rounded-full bg-gray-300 hover:bg-primary transition-all"
+              onClick={() => {
+                if (!scrollContainerRef.current) return;
+                const cardWidth =
+                  scrollContainerRef.current.children[0]?.offsetWidth + 24;
+                scrollContainerRef.current.scrollTo({
+                  left: idx * cardWidth,
+                  behavior: 'smooth',
+                });
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
+      <style jsx>{`
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
+    </section>
+  );
 }

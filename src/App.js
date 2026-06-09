@@ -22,6 +22,7 @@ import Orders from './dashboard/orders';
 import OrderDetails from './dashboard/ordersDetails';
 import BulkOrders from './dashboard/bulkOrder';
 import Settings from './dashboard/setting';
+import ContactUs from './components/contactus';
 
 
 // Layout for public pages
@@ -52,6 +53,7 @@ function App() {
           <Route path="/ProductDetail/:id" element={<PublicLayout><ProductDetail /></PublicLayout>} />
           <Route path="/ProductList/:id?" element={<PublicLayout><ProductList /></PublicLayout>} />
           <Route path="/about" element={<PublicLayout><About /></PublicLayout>} />
+          <Route path="/contactus" element={<PublicLayout><ContactUs /></PublicLayout>} />
           <Route path="/Cart" element={<PublicLayout><Cart /></PublicLayout>} />
           <Route path='/checkout' element={<PublicLayout><CheckOut /></PublicLayout>} />
           {/* admin login - no navbar/footer */}
@@ -66,7 +68,7 @@ function App() {
           <Route path='/dashboard/Orders' element={<DashboardLayout><Orders /></DashboardLayout>} />
           <Route path='/dashboard/OrdersDetails/:id' element={<DashboardLayout><OrderDetails /></DashboardLayout>} />
           <Route path='/dashboard/bulkOrders' element={<DashboardLayout><BulkOrders /></DashboardLayout>} />
-           <Route path='/dashboard/settings' element={<DashboardLayout><Settings /></DashboardLayout>} />
+          <Route path='/dashboard/settings' element={<DashboardLayout><Settings /></DashboardLayout>} />
         </Routes>
       </div>
     </BrowserRouter>

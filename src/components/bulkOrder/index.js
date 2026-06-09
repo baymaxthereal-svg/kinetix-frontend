@@ -46,24 +46,18 @@ export default function BulkOrder() {
     return (
         <main className="pt-20">
             <ToastContainer />
-            <section className="relative min-h-[409px] flex items-center overflow-hidden bg-surface-container-low">
-                <div className="absolute inset-0 z-0">
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-primary-container/20"></div>
-                    <img className="w-full h-full object-cover mix-blend-overlay opacity-30"
-                        alt="minimalist modern medical warehouse with neatly organized sensory equipment and physiotherapy tools in soft blue light"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEBIi50O_7g8l1GeA1T-ecIe7wwLk14TV7Auuq_8b0s4C_onl04w5v8fpTMqAHDdfxx8tAxJoy3mIct1_6nONE97k9d_13BgArgf_y3by-nSI4uR1bmaSEsEu65w_FTsq1j9k2bO0lKLDiBanikcMaDIYXFeofLWeRagKmDhlu8e0Y4S4y69BHcKJ4n6qsy74kvgdOdFt00UBFS5fM42L63tSoTyUCfo-ii2DFYWYwacxtA6Iv_H9bN5oync__VnVrCQfappVcTBY" />
-                </div>
+            <section className="relative min-h-[409px] flex items-center overflow-hidden">
+                {/* Linear gradient background (#154360, #1A1A1A) */}
+                <div className="absolute inset-0 z-0 bg-gradient-to-br from-[#154360] to-[#1A1A1A]"></div>
+
                 <div className="relative z-10 max-w-7xl mx-auto px-6 py-20">
                     <div className="max-w-2xl">
-                        <span className="text-sm font-bold tracking-widest text-primary uppercase mb-4 block font-label">
-                            Institutional Partners
-                        </span>
-                        <h1 className="text-5xl md:text-6xl font-extrabold text-on-surface font-headline leading-tight tracking-tighter mb-6">
-                            Empowering Growth at <span className="text-primary">Scale.</span>
+                        <h1 className="text-5xl md:text-6xl font-extrabold font-headline leading-tight tracking-tighter mb-6">
+                            <span className="text-[#60CE80]">Bulk Supplier</span>{' '}
+                            <span className="text-white">of Therapy & Medical Simulation Equipment</span>
                         </h1>
-                        <p className="text-lg text-on-surface-variant leading-relaxed mb-8">
-                            Dedicated procurement solutions for schools, rehab centers, and healthcare networks. Access
-                            specialized pricing and tailored logistics for high-volume sensory and physiotherapy equipment.
+                        <p className="text-lg leading-relaxed mb-8 text-white">
+                            Kinetix is a reliable bulk manufacturer and wholesale supplier of occupational therapy equipment, physiotherapy products, rehabilitation tools, and medical simulation mannequins for clinics, hospitals, universities, distributors, and healthcare institutions.
                         </p>
                     </div>
                 </div>
@@ -197,14 +191,13 @@ export default function BulkOrder() {
                         </form>
                     </div>
 
-                    {/* Right side content (unchanged) */}
                     <div className="lg:col-span-5 grid grid-cols-1 gap-8">
                         <div className="bg-primary text-on-primary p-8 rounded-xl relative overflow-hidden group">
                             <div className="relative z-10">
                                 <span className="material-symbols-outlined text-4xl mb-4">verified_user</span>
-                                <h3 className="text-2xl font-bold font-headline mb-2">Verified Supplier</h3>
+                                <h3 className="text-2xl font-bold font-headline mb-2">Manufacture Under Your Brand</h3>
                                 <p className="text-primary-fixed/80 leading-relaxed">
-                                    We are registered vendors for over 200 school districts and private healthcare networks globally.
+                                    Kinetix also offers OEM and private label manufacturing services for businesses and distributors who want to sell therapy or medical simulation products under their own brand name.
                                 </p>
                             </div>
                             <div className="absolute -right-10 -bottom-10 opacity-10 group-hover:scale-110 transition-transform duration-700">
@@ -220,8 +213,8 @@ export default function BulkOrder() {
                                         <span className="text-secondary font-bold">1</span>
                                     </div>
                                     <div>
-                                        <h4 className="font-bold text-on-surface">Request Quote</h4>
-                                        <p className="text-sm text-on-surface-variant">Submit your needs and institutional details.</p>
+                                        <h4 className="font-bold text-on-surface">Share Your Requirements</h4>
+                                        <p className="text-sm text-on-surface-variant">Tell Us What You Need</p>
                                     </div>
                                 </div>
                                 <div className="flex gap-4">
@@ -229,8 +222,8 @@ export default function BulkOrder() {
                                         <span className="text-secondary font-bold">2</span>
                                     </div>
                                     <div>
-                                        <h4 className="font-bold text-on-surface">Custom Proposal</h4>
-                                        <p className="text-sm text-on-surface-variant">Our team prepares a tiered pricing list within 24 hours.</p>
+                                        <h4 className="font-bold text-on-surface">Design & Quotation Approval</h4>
+                                        <p className="text-sm text-on-surface-variant">Get Custom Plan & Pricing</p>
                                     </div>
                                 </div>
                                 <div className="flex gap-4">
@@ -238,61 +231,25 @@ export default function BulkOrder() {
                                         <span className="text-secondary font-bold">3</span>
                                     </div>
                                     <div>
-                                        <h4 className="font-bold text-on-surface">Fulfillment</h4>
-                                        <p className="text-sm text-on-surface-variant">Priority logistics and setup support for your facility.</p>
+                                        <h4 className="font-bold text-on-surface">Production & Delivery</h4>
+                                        <p className="text-sm text-on-surface-variant">We Manufacture & Deliver to You</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="bg-tertiary-fixed text-on-tertiary-fixed p-8 rounded-xl flex items-center justify-between border-none">
+                        {/* Need immediate help - clickable with phone number */}
+                        <a
+                            href="tel:03144201005"
+                            className="bg-tertiary-fixed text-on-tertiary-fixed p-8 rounded-xl flex items-center justify-between border-none hover:opacity-90 transition-opacity cursor-pointer"
+                        >
                             <div>
                                 <h4 className="font-bold font-headline">Need immediate help?</h4>
                                 <p className="text-sm opacity-80">Call our institutional desk</p>
+                                <p className="text-lg font-bold mt-2">0314 4201005</p>
                             </div>
                             <span className="material-symbols-outlined text-4xl">support_agent</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Popular Bulk Categories section remains unchanged, but fix class to className if needed */}
-            <section className="py-24 bg-surface-container-low overflow-hidden">
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
-                        <div className="max-w-xl">
-                            <h2 className="text-4xl font-bold font-headline text-on-surface tracking-tight mb-4">Popular Bulk Categories</h2>
-                            <p className="text-on-surface-variant">Scalable solutions for every therapeutic environment.</p>
-                        </div>
-                        <div className="flex gap-2">
-                            <button className="p-3 bg-surface rounded-full shadow-sm hover:bg-surface-container-high transition-colors">
-                                <span className="material-symbols-outlined">arrow_back</span>
-                            </button>
-                            <button className="p-3 bg-primary text-on-primary rounded-full shadow-sm hover:opacity-90 transition-opacity">
-                                <span className="material-symbols-outlined">arrow_forward</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div className="flex gap-8 overflow-x-auto pb-8 no-scrollbar">
-                        {/* Repeat category cards, ensure images use className and alt properly */}
-                        <div className="min-w-[320px] bg-surface rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                            <div className="h-64 relative">
-                                <img className="w-full h-full object-cover"
-                                    alt="a collection of soft colorful sensory blocks and liquid floor tiles in a clean bright room"
-                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5JQ8uFLW-3P3IUkHPTDPM1CfYfssy1KCvsTZHWiG1eY8oFw3xIvi_qFJokQ92r_CS-dArFzF2tz71twTKWoJyv4ULL587mSCXkNYiak3L4hsTSkDQHlkZCmT2eyBnaGroEmZLdl_-E1kzoHWlGj0KyiDUv1LnSu5Mn32BFKYJNzfnExXX6azl3bozJxDm7WMVYzGCC_SzNOnuiHfWL430wv46-ZBM3NHUHGy4RWhyD9QPkYi_esqOXSwF5K4PC2yOFcgLCrynO5k" />
-                                <div className="absolute top-4 left-4">
-                                    <span className="bg-secondary text-on-secondary px-3 py-1 rounded-full text-xs font-bold font-label uppercase">School Kits</span>
-                                </div>
-                            </div>
-                            <div className="p-6">
-                                <h3 className="font-bold font-headline text-xl mb-2">Sensory Play Packs</h3>
-                                <p className="text-sm text-on-surface-variant mb-4">Curated sets for special education classrooms.</p>
-                                <a className="text-primary font-bold text-sm inline-flex items-center gap-1 hover:underline" href="#">
-                                    View Bundle Details <span className="material-symbols-outlined text-sm">open_in_new</span>
-                                </a>
-                            </div>
-                        </div>
-                        {/* Add other cards similarly */}
+                        </a>
                     </div>
                 </div>
             </section>

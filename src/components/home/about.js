@@ -30,33 +30,30 @@ export default function About() {
                 </div>
                 <div class="order-1 lg:order-2">
                     <span class="text-primary font-bold uppercase tracking-widest text-sm mb-4 block">Our Story</span>
-                    <h2 class="font-headline text-4xl font-extrabold text-on-surface mb-8 leading-tight">Better Outcomes
-                        through Evidence-Based Design.</h2>
+                    <h2 class="font-headline text-4xl font-extrabold text-on-surface mb-8 leading-tight">Advanced Solutions for Better Care</h2>
                     <p class="text-on-surface-variant text-lg leading-relaxed mb-8">
-                        At Kinetix, we bridge the gap between clinical necessity and creative play. Founded by a team of
-                        pediatric physiotherapists, we specialize in high-performance sensory tools that support
-                        neurodiversity and physical rehabilitation.
+                        At Kinetix, we believe that the right therapy and rehabilitation equipment can transform lives. From physiotherapy and occupational therapy to sensory integration and home care, our mission is to deliver products that combine comfort, durability, and performance to support healthcare and learning environments.
                     </p>
                     <div class="space-y-4 mb-10">
                         <div class="flex items-center gap-4">
                             <span class="material-symbols-outlined text-secondary"
                                 data-icon="check_circle">check_circle</span>
-                            <span class="font-bold text-on-surface">Physiotherapist-Approved Equipment</span>
+                            <span class="font-bold text-on-surface">Advanced Rehabilitation Products</span>
                         </div>
                         <div class="flex items-center gap-4">
                             <span class="material-symbols-outlined text-secondary"
                                 data-icon="check_circle">check_circle</span>
-                            <span class="font-bold text-on-surface">Eco-Friendly &amp; Non-Toxic Materials</span>
+                            <span class="font-bold text-on-surface">Supporting Healthcare & Education</span>
                         </div>
                         <div class="flex items-center gap-4">
                             <span class="material-symbols-outlined text-secondary"
                                 data-icon="check_circle">check_circle</span>
-                            <span class="font-bold text-on-surface">Specialized Support for Schools</span>
+                            <span class="font-bold text-on-surface">Designed for Everyday Living</span>
                         </div>
                     </div>
                     <button
                         class="px-8 py-4 bg-on-surface text-surface rounded-xl font-bold hover:bg-on-surface-variant transition-all">Learn
-                        About Our Mission</button>
+                       More About Us</button>
                 </div>
             </div>
         </section>

@@ -42,7 +42,7 @@ export default function Contact() {
     return (
         <section className="py-24 bg-surface-container-low">
             <ToastContainer />
-            <div className="max-w-5xl mx-auto px-6">
+            <div className="max-w-7xl mx-auto px-6">
                 <div className="bg-surface-container-lowest rounded-[3rem] p-10 md:p-20 shadow-xl grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                     <div>
                         <h2 className="font-headline text-4xl font-extrabold text-on-surface mb-6">Need a Custom Solution?</h2>
@@ -60,7 +60,7 @@ export default function Contact() {
                                 <div className="w-12 h-12 bg-secondary-fixed flex items-center justify-center rounded-full">
                                     <span className="material-symbols-outlined text-secondary">call</span>
                                 </div>
-                                <p className="font-semibold">1-800-KINETIX-GROW</p>
+                                <p className="font-semibold">0314-4201005</p>
                             </div>
                         </div>
                     </div>

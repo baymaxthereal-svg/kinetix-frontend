@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useGetProducts, useUpdateProduct, useDeleteProduct } from "../backend/hooks";
 import { toast } from "react-toastify";
-// 🔽 New imports for react-quill-new
 import React from "react";
 import ReactDOM from "react-dom/client";
 import ReactQuill from "react-quill-new";
@@ -48,7 +47,6 @@ export default function InventoryProduct() {
     setOpenDropdownId(openDropdownId === id ? null : id);
   };
 
-  // Helper to get an array of tags (handles string or array of strings)
   const getTagsArray = (tags) => {
     if (!tags) return [];
     if (Array.isArray(tags)) {
@@ -57,7 +55,6 @@ export default function InventoryProduct() {
     return tags.split(",").map((s) => s.trim());
   };
 
-  // Build HTML for current images (thumbnails)
   const buildCurrentImagesHtml = (images) => {
     if (!images || images.length === 0)
       return `<p class="text-sm text-gray-500">No images uploaded yet.</p>`;
@@ -66,9 +63,7 @@ export default function InventoryProduct() {
         (img, idx) => `
       <div class="relative inline-block">
         <img src="${process.env.REACT_APP_BE_URL + img}" class="h-20 w-20 object-cover rounded-lg border shadow-sm" />
-        <span class="absolute -top-2 -right-2 w-5 h-5 bg-primary text-white rounded-full text-xs flex items-center justify-center">${
-          idx + 1
-        }</span>
+        <span class="absolute -top-2 -right-2 w-5 h-5 bg-primary text-white rounded-full text-xs flex items-center justify-center">${idx + 1}</span>
       </div>
     `
       )
@@ -76,13 +71,12 @@ export default function InventoryProduct() {
     return `<div class="flex gap-3 flex-wrap">${imgTags}</div>`;
   };
 
-  // Edit handler with react-quill-new for technical_description
   const handleEdit = (product) => {
     const tagString = getTagsArray(product.tags).join(", ");
     const currentImagesHtml = buildCurrentImagesHtml(product.images);
 
-    let getQuillContent = null; // function to retrieve HTML from Quill editor
-    let quillRoot = null; // React root instance for cleanup
+    let getQuillContent = null;
+    let quillRoot = null;
 
     Swal.fire({
       title: `Edit Product: ${product.title}`,
@@ -103,9 +97,7 @@ export default function InventoryProduct() {
             </div>
             <div>
               <label class="block text-sm font-semibold text-gray-700 mb-1">Category ID *</label>
-              <input id="edit-category_id" class="swal2-input w-full" value="${
-                product.category_id
-              }" />
+              <input id="edit-category_id" class="swal2-input w-full" value="${product.category_id}" />
             </div>
             <div>
               <label class="block text-sm font-semibold text-gray-700 mb-1">Description</label>
@@ -115,24 +107,17 @@ export default function InventoryProduct() {
             </div>
             <div>
               <label class="block text-sm font-semibold text-gray-700 mb-1">Technical Description</label>
-              <!-- Container for ReactQuill -->
               <div id="quill-editor-container"></div>
             </div>
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-1">Price (USD) *</label>
-              <input id="edit-price" type="number" step="0.01" class="swal2-input w-full" value="${
-                product.price
-              }" />
+              <label class="block text-sm font-semibold text-gray-700 mb-1">Price (PKR) *</label>
+              <input id="edit-price" type="number" step="0.01" class="swal2-input w-full" value="${product.price}" />
             </div>
             <div>
               <label class="block text-sm font-semibold text-gray-700 mb-1">In Stock</label>
               <select id="edit-in_stock" class="swal2-select w-full">
-                <option value="yes" ${
-                  product.in_stock === "yes" ? "selected" : ""
-                }>Yes</option>
-                <option value="no" ${
-                  product.in_stock === "no" ? "selected" : ""
-                }>No</option>
+                <option value="yes" ${product.in_stock === "yes" ? "selected" : ""}>Yes</option>
+                <option value="no" ${product.in_stock === "no" ? "selected" : ""}>No</option>
               </select>
             </div>
             <div>
@@ -157,16 +142,13 @@ export default function InventoryProduct() {
       cancelButtonText: "Cancel",
       confirmButtonColor: "#0F67FE",
       didOpen: () => {
-        // Preview new images when they are selected
         const fileInput = document.getElementById("edit-new-images");
         const previewContainer = document.getElementById("new-images-preview");
         if (fileInput && previewContainer) {
           fileInput.addEventListener("change", (e) => {
             const files = Array.from(e.target.files);
             if (files.length > 5) {
-              Swal.showValidationMessage(
-                "You can upload a maximum of 5 images."
-              );
+              Swal.showValidationMessage("You can upload a maximum of 5 images.");
               fileInput.value = "";
               previewContainer.innerHTML = "";
               return;
@@ -185,7 +167,6 @@ export default function InventoryProduct() {
           });
         }
 
-        // 🔽 Mount ReactQuill editor into the container
         const container = document.getElementById("quill-editor-container");
         if (container) {
           quillRoot = ReactDOM.createRoot(container);
@@ -200,7 +181,6 @@ export default function InventoryProduct() {
         }
       },
       willClose: () => {
-        // Unmount React component to clean up
         if (quillRoot) {
           quillRoot.unmount();
           quillRoot = null;
@@ -208,17 +188,10 @@ export default function InventoryProduct() {
       },
       preConfirm: () => {
         const title = document.getElementById("edit-title")?.value.trim();
-        const category_id = document
-          .getElementById("edit-category_id")
-          ?.value.trim();
-        const description = document
-          .getElementById("edit-description")
-          ?.value.trim();
-        // Get value from Quill editor
+        const category_id = document.getElementById("edit-category_id")?.value.trim();
+        const description = document.getElementById("edit-description")?.value.trim();
         const technical_description = getQuillContent ? getQuillContent() : "";
-        const price = parseFloat(
-          document.getElementById("edit-price")?.value
-        );
+        const price = parseFloat(document.getElementById("edit-price")?.value);
         const in_stock = document.getElementById("edit-in_stock")?.value;
         const tags = document.getElementById("edit-tags")?.value.trim();
         const newImages = document.getElementById("edit-new-images")?.files;
@@ -244,13 +217,11 @@ export default function InventoryProduct() {
         formData.append("title", title);
         formData.append("category_id", category_id);
         formData.append("description", description);
-        if (technical_description)
-          formData.append("technical_description", technical_description);
+        if (technical_description) formData.append("technical_description", technical_description);
         formData.append("price", price);
         formData.append("in_stock", in_stock);
         formData.append("tags", tags);
 
-        // Append each new image (if any) – they will replace existing images
         if (newImages && newImages.length) {
           for (let i = 0; i < newImages.length; i++) {
             formData.append("images", newImages[i]);
@@ -310,8 +281,7 @@ export default function InventoryProduct() {
   };
 
   if (isLoading) return <div className="p-8 text-center">Loading products...</div>;
-  if (error)
-    return <div className="p-8 text-center text-error">Error: {error.message}</div>;
+  if (error) return <div className="p-8 text-center text-error">Error: {error.message}</div>;
 
   return (
     <main className="min-h-screen py-2 px-2">
@@ -336,20 +306,13 @@ export default function InventoryProduct() {
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
         <div className="bg-surface-container-lowest p-6 rounded-2xl transition-all hover:bg-white flex items-center gap-5">
           <div className="w-12 h-12 rounded-full bg-primary-fixed-dim/20 flex items-center justify-center">
-            <span
-              className="material-symbols-outlined text-primary"
-              style={{ fontVariationSettings: "'FILL' 1" }}
-            >
+            <span className="material-symbols-outlined text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>
               inventory_2
             </span>
           </div>
           <div>
-            <p className="text-sm font-medium text-on-surface-variant">
-              Total Products
-            </p>
-            <p className="text-2xl font-bold text-on-surface">
-              {data?.count || 0}
-            </p>
+            <p className="text-sm font-medium text-on-surface-variant">Total Products</p>
+            <p className="text-2xl font-bold text-on-surface">{data?.count || 0}</p>
           </div>
         </div>
       </section>
@@ -360,99 +323,67 @@ export default function InventoryProduct() {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-surface-container-low text-xs font-bold text-on-surface-variant uppercase tracking-widest">
-                  <th className="px-6 py-4">Product</th>
-                  <th className="px-6 py-4">Category</th>
-                  <th className="px-6 py-4">Tags</th>
-                  <th className="px-6 py-4">Stock</th>
-                  <th className="px-6 py-4">Price</th>
-                  <th className="px-6 py-4 text-right">Actions</th>
-                 </tr>
+                  <th className="px-6 py-4 min-w-[220px]">Product</th>
+                  <th className="px-6 py-4 min-w-[120px]">Category</th>
+                  <th className="px-6 py-4 min-w-[180px]">Tags</th>
+                  <th className="px-6 py-4 min-w-[100px]">Stock</th>
+                  <th className="px-6 py-4 min-w-[100px]">Price (PKR)</th>
+                  <th className="px-6 py-4 text-right min-w-[100px]">Actions</th>
+                </tr>
               </thead>
               <tbody className="divide-y divide-surface-container-high">
                 {data?.products?.map((prod) => (
                   <tr key={prod.id} className="hover:bg-slate-50/50 transition-colors">
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-4 min-w-[220px]">
                       <div className="flex items-center gap-4">
                         <div className="w-14 h-14 rounded-xl bg-slate-100 flex-shrink-0 overflow-hidden">
                           <img
                             className="w-full h-full object-cover"
                             alt={prod.title}
-                            src={
-                              prod.images?.[0]
-                                ? process.env.REACT_APP_BE_URL + prod.images[0]
-                                : "https://via.placeholder.com/56"
-                            }
+                            src={prod.images?.[0] ? process.env.REACT_APP_BE_URL + prod.images[0] : "https://via.placeholder.com/56"}
                           />
                         </div>
                         <div>
-                          <p className="font-bold text-on-surface">{prod.title}</p>
+                          <p className="font-bold text-on-surface break-words">{prod.title}</p>
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-sm font-mono text-outline">
-                      {prod.category_id}
+                    <td className="px-6 py-4 text-sm font-mono text-outline min-w-[120px]">{prod.category_id}</td>
+                    <td className="px-6 py-4 min-w-[180px]">
+                      <div className="flex flex-wrap gap-1">
+                        {getTagsArray(prod.tags).map((tag, idx) => (
+                          <span key={idx} className="inline-flex items-center px-3 py-1 bg-secondary-fixed text-on-secondary-fixed-variant text-xs font-bold rounded-full whitespace-nowrap">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
                     </td>
-                    <td className="px-6 py-4">
-                      {getTagsArray(prod.tags).map((tag, idx) => (
-                        <span
-                          key={idx}
-                          className="inline-flex items-center px-3 mx-1 py-1 bg-secondary-fixed text-on-secondary-fixed-variant text-xs font-bold rounded-full"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </td>
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-4 min-w-[100px]">
                       {prod.in_stock === "yes" ? (
-                        <span className="text-green-600 font-semibold">
-                          In Stock
-                        </span>
+                        <span className="text-green-600 font-semibold whitespace-nowrap">In Stock</span>
                       ) : (
-                        <span className="text-red-500">Out of Stock</span>
+                        <span className="text-red-500 whitespace-nowrap">Out of Stock</span>
                       )}
                     </td>
-                    <td className="px-6 py-4 font-bold text-on-surface">
-                      ${prod.price}
+                    <td className="px-6 py-4 font-bold text-on-surface min-w-[100px]">
+                      Rs {prod.price}
                     </td>
-                    <td className="px-6 py-4 text-right relative">
-                      <button
-                        onClick={() => toggleDropdown(prod.id)}
-                        className="p-2 text-outline hover:text-primary transition-colors"
-                      >
-                        <span className="material-symbols-outlined">
-                          more_vert
-                        </span>
+                    <td className="px-6 py-4 text-right relative min-w-[100px]">
+                      <button onClick={() => toggleDropdown(prod.id)} className="p-2 text-outline hover:text-primary transition-colors">
+                        <span className="material-symbols-outlined">more_vert</span>
                       </button>
                       {openDropdownId === prod.id && (
                         <div className="absolute right-8 mt-2 w-36 bg-surface-container-high rounded-lg shadow-lg z-10 border border-outline-variant/20 overflow-hidden">
-                          <button
-                            onClick={() => {
-                              handleEdit(prod);
-                              setOpenDropdownId(null);
-                            }}
-                            className="w-full text-left px-4 py-2 text-sm text-on-surface hover:bg-primary-fixed/20 transition-colors flex items-center gap-2"
-                          >
-                            <span className="material-symbols-outlined text-base">
-                              edit
-                            </span>
-                            Edit
+                          <button onClick={() => { handleEdit(prod); setOpenDropdownId(null); }} className="w-full text-left px-4 py-2 text-sm text-on-surface hover:bg-primary-fixed/20 transition-colors flex items-center gap-2">
+                            <span className="material-symbols-outlined text-base">edit</span> Edit
                           </button>
-                          <button
-                            onClick={() => {
-                              handleDelete(prod);
-                              setOpenDropdownId(null);
-                            }}
-                            className="w-full text-left px-4 py-2 text-sm text-error hover:bg-error/10 transition-colors flex items-center gap-2"
-                          >
-                            <span className="material-symbols-outlined text-base">
-                              delete
-                            </span>
-                            Delete
+                          <button onClick={() => { handleDelete(prod); setOpenDropdownId(null); }} className="w-full text-left px-4 py-2 text-sm text-error hover:bg-error/10 transition-colors flex items-center gap-2">
+                            <span className="material-symbols-outlined text-base">delete</span> Delete
                           </button>
                         </div>
                       )}
                     </td>
-                   </tr>
+                  </tr>
                 ))}
               </tbody>
             </table>

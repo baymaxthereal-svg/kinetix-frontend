@@ -34,7 +34,7 @@ const productValidationSchema = Yup.object({
 export default function AddProduct() {
   const { data: categoriesData } = useGetCategories();
   const { mutate: createProduct, isLoading: isProductLoading } = useCreateProduct();
-  const navigate = new useNavigate();
+  const navigate = useNavigate();
 
   // Refs for file inputs
   const heroInputRef = useRef();
@@ -50,7 +50,6 @@ export default function AddProduct() {
   const [image3Preview, setImage3Preview] = useState(null);
   const [image4Preview, setImage4Preview] = useState(null);
 
-  // Generic image upload handler
   const handleImageUpload = (file, fieldName, setPreview) => {
     if (file) {
       formik.setFieldValue(fieldName, file);
@@ -65,7 +64,6 @@ export default function AddProduct() {
 
   const triggerFileInput = (ref) => ref.current.click();
 
-  // Formik setup
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -92,7 +90,6 @@ export default function AddProduct() {
       productData.append("in_stock", values.inStock);
       productData.append("tags", values.tags);
 
-      // Collect all images into an array and append under the same key "images"
       const allImages = [
         values.heroImage,
         values.image1,
@@ -111,7 +108,6 @@ export default function AddProduct() {
         onSuccess: (response) => {
           toast.success(response?.message || "Product created successfully!");
           resetForm();
-          // Clear previews
           setHeroPreview(null);
           setImage1Preview(null);
           setImage2Preview(null);
@@ -129,7 +125,6 @@ export default function AddProduct() {
     },
   });
 
-  // Quill editor configuration
   const quillModules = {
     toolbar: [
       [{ header: [1, 2, false] }],
@@ -211,9 +206,8 @@ export default function AddProduct() {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   className={`w-full bg-surface-container-highest border-none rounded-lg p-3 text-on-surface focus:ring-2 focus:ring-primary transition-all ${formik.touched.description && formik.errors.description ? "ring-2 ring-error" : ""
-                    }`}
+                    } h-40 md:h-24`}
                   placeholder="Detail the therapeutic benefits, pressure mapping, and patient use cases..."
-                  rows="4"
                 />
                 {formik.touched.description && formik.errors.description && (
                   <p className="text-error text-xs mt-1">{formik.errors.description}</p>
@@ -221,15 +215,17 @@ export default function AddProduct() {
               </div>
               <div>
                 <label className="block text-sm font-bold text-on-surface mb-2">Technical Description</label>
-                <ReactQuill
-                  theme="snow"
-                  value={formik.values.technicalDescription}
-                  onChange={(content) => formik.setFieldValue("technicalDescription", content)}
-                  modules={quillModules}
-                  formats={quillFormats}
-                  placeholder="Enter ISO certifications, material safety data, weight limits, etc."
-                  className="bg-surface-container-highest rounded-lg [&_.ql-container]:min-h-[120px]"
-                />
+                <div className="min-h-[200px] md:min-h-[120px]">
+                  <ReactQuill
+                    theme="snow"
+                    value={formik.values.technicalDescription}
+                    onChange={(content) => formik.setFieldValue("technicalDescription", content)}
+                    modules={quillModules}
+                    formats={quillFormats}
+                    placeholder="Enter ISO certifications, material safety data, weight limits, etc."
+                    className="bg-surface-container-highest rounded-lg h-full"
+                  />
+                </div>
                 <p className="text-xs text-on-surface-variant mt-1">
                   Tip: Use bold, lists, and headings to structure the technical description.
                 </p>
@@ -364,10 +360,10 @@ export default function AddProduct() {
             <div className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
-                  Clinical Price (USD)
+                  Clinical Price (PKR)
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold">Rs</span>
                   <input
                     name="price"
                     value={formik.values.price}
@@ -426,7 +422,7 @@ export default function AddProduct() {
                   <h4 className="text-sm font-bold text-on-surface leading-tight">
                     {formik.values.name || "Product Name"}
                   </h4>
-                  <span className="text-primary font-bold">${formik.values.price || "0.00"}</span>
+                  <span className="text-primary font-bold">Rs {formik.values.price || "0.00"}</span>
                 </div>
                 <p className="text-xs text-slate-500 line-clamp-2">
                   {formik.values.description || "Product description will appear here."}

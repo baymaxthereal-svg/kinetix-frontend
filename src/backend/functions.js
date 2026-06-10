@@ -1,11 +1,4 @@
-import axios from 'axios';
-const apiClient = axios.create({
-    baseURL: process.env.REACT_APP_BE_URL,
-    headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-    },
-});
+import apiClient from './intercepter';
 export const adminLogin = async ({ username, password }) => {
     try {
         const response = await apiClient.post('/api/auth/login', { username, password });

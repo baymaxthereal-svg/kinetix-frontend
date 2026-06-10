@@ -6,9 +6,16 @@ import * as Yup from 'yup';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+// Helper to set a cookie with expiry in hours
+const setCookie = (name, value, hours = 1) => {
+    const expires = new Date();
+    expires.setTime(expires.getTime() + hours * 60 * 60 * 1000);
+    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+};
+
 export default function DashboardLogin() {
     const navigate = useNavigate();
-    const { mutate: login, isLoading, error } = useAdminLogin();
+    const { mutate: login, isLoading } = useAdminLogin();
     const [showPassword, setShowPassword] = useState(false);
 
     const formik = useFormik({
@@ -26,6 +33,10 @@ export default function DashboardLogin() {
                 { username: values.username, password: values.password },
                 {
                     onSuccess: (data) => {
+                        // Save token to cookie (expires in 1 hour)
+                        if (data.token) {
+                            setCookie('token', data.token, 1); // 1 hour expiry
+                        }
                         toast.success('Login successful! Redirecting...', {
                             position: "top-right",
                             autoClose: 2000,
